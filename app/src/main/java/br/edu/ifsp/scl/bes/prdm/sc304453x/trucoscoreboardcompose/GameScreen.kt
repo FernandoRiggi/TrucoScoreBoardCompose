@@ -23,6 +23,10 @@ fun GameScreen(modifier: Modifier = Modifier) {
     var roundValue by remember { mutableStateOf(RoundValue.ONE) }
     var gameState by remember { mutableStateOf(GameState.NORMAL) }
 
+    val isGameFinished = usScore >= 12 || themScore >= 12
+
+    var isTrucoEnabled by remember { mutableStateOf(true) }
+
     val addPointTeamUs = {
         game.addPoint(Team.US)
         usScore = game.usScore
@@ -43,6 +47,19 @@ fun GameScreen(modifier: Modifier = Modifier) {
         gameState = game.state
     }
 
+    val reset = {
+        game.resetGame()
+        roundValue = game.roundValue
+        gameState = game.state
+        usScore = game.usScore
+        themScore = game.themScore
+        isTrucoEnabled = true
+    }
+
+    if (gameState == GameState.HAND_OF_ELEVEN) {
+        isTrucoEnabled = false
+    }
+
     Column(modifier = modifier) {
         Text("Pontuação - US: $usScore | THEM: $themScore", style = MaterialTheme.typography.bodyLarge)
 
@@ -50,19 +67,23 @@ fun GameScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height((16.dp)))
 
-        Button(onClick = addPointTeamUs) {
+        Button(onClick = addPointTeamUs, enabled = !isGameFinished) {
             Text("+${roundValue.points}")
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Button(onClick = addPointTeamThem) {
+        Button(onClick = addPointTeamThem, enabled = !isGameFinished) {
             Text("+${roundValue.points}")
         }
 
         Text("Valendo: ${roundValue.points}")
-        Button(onClick = callTruco) {
+        Button(onClick = callTruco, enabled = (!isGameFinished && isTrucoEnabled )) {
             Text("Truco")
+        }
+
+        Button(onClick = reset) {
+            Text("Resetar")
         }
     }
 
@@ -74,6 +95,7 @@ fun GameScreen(modifier: Modifier = Modifier) {
                 themScore = game.themScore
                 roundValue = game.roundValue
                 gameState = game.state
+                isTrucoEnabled = false
             },
             onQuit = {
                 game.resolveHandOfEleven(false)
@@ -81,6 +103,7 @@ fun GameScreen(modifier: Modifier = Modifier) {
                 themScore = game.themScore
                 roundValue = game.roundValue
                 gameState = game.state
+                isTrucoEnabled = false
             }
         )
     }
