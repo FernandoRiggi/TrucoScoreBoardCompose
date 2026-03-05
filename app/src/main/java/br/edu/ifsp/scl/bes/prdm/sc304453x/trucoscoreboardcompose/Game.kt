@@ -13,14 +13,23 @@ class Game(private val target: Int = 12) {
     var state = GameState.NORMAL
         private set
 
-    fun addPoint(team: Team) {
-        if (state == GameState.FINISHED) return
+    fun addPoint(team: Team, points: Int) {
+        println("Tentando adicionar ponto classe Game: points: $points, usScore = $usScore, themScore = $themScore, roundValue = $roundValue, state = $state")
 
-        when (team) {
-            Team.US -> usScore += roundValue.points
-            Team.THEM -> themScore += roundValue.points
+        if (state == GameState.FINISHED) {
+            println("O jogo já acabou!")
+            return
         }
 
+        // Adiciona pontos ao time dependendo de qual time foi passado
+        when (team) {
+            Team.US -> usScore = roundValue.points + points
+            Team.THEM -> themScore += roundValue.points + points
+        }
+
+        println("Após adicionar ponto classe Game: usScore = $usScore, themScore = $themScore")
+
+        // Finaliza a rodada e avalia o estado
         endRound()
     }
     fun callTruco() {
