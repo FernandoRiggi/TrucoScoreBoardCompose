@@ -16,29 +16,22 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun GameScreen(modifier: Modifier = Modifier) {
-    val game = Game()
+    val game = remember { Game() }
 
     var usScore by remember { mutableStateOf(game.usScore) }
     var themScore by remember { mutableStateOf(game.themScore) }
     var roundValue by remember { mutableStateOf(RoundValue.ONE) }
     var gameState by remember { mutableStateOf(GameState.NORMAL) }
 
-
-    var showDialog by remember { mutableStateOf(false) }
-    var dialogMessage by remember { mutableStateOf("")}
-
     val addPointTeamUs = {
-        println("Estado do jogo na UI antes de adicionar pontos: usScore = $usScore, themScore = $themScore, roundValue = $roundValue, gameState = $gameState")
-        game.addPoint(Team.US, usScore)
-        println("Após adicionar ponto resultado UI: usScore = ${game.usScore}, themScore = ${game.themScore}, roundValue = ${game.roundValue}, gameState = ${game.state}")
+        game.addPoint(Team.US)
         usScore = game.usScore
         roundValue = game.roundValue
         gameState = game.state
     }
 
     val addPointTeamThem = {
-        println("Estado do jogo antes de adicionar pontos: usScore = $usScore, themScore = $themScore, roundValue = $roundValue, gameState = $gameState")
-        game.addPoint(Team.THEM, themScore)
+        game.addPoint(Team.THEM)
         themScore = game.themScore
         roundValue = game.roundValue
         gameState = game.state
