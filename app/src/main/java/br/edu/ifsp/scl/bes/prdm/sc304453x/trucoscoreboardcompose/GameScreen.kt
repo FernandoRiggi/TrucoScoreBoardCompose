@@ -37,23 +37,32 @@ fun GameScreen(modifier: Modifier = Modifier) {
         gameState = game.state
     }
 
+    val callTruco = {
+        game.callTruco()
+        roundValue = game.roundValue
+        gameState = game.state
+    }
+
     Column(modifier = modifier) {
         Text("Pontuação - US: $usScore | THEM: $themScore", style = MaterialTheme.typography.bodyLarge)
 
         Spacer(modifier = Modifier.height((16.dp)))
 
-        Text("Estado do Jogo: $gameState", style = MaterialTheme.typography.bodyMedium)
-
         Spacer(modifier = Modifier.height((16.dp)))
 
         Button(onClick = addPointTeamUs) {
-            Text("Adicionar ponto para US")
+            Text("+${roundValue.points}")
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(onClick = addPointTeamThem) {
-            Text("Adicionar ponto para Them")
+            Text("+${roundValue.points}")
+        }
+
+        Text("Valendo: ${roundValue.points}")
+        Button(onClick = callTruco) {
+            Text("Truco")
         }
     }
 
