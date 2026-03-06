@@ -1,8 +1,17 @@
 package br.edu.ifsp.scl.bes.prdm.sc304453x.trucoscoreboardcompose
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -11,8 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun GameScreen(modifier: Modifier = Modifier) {
@@ -60,30 +71,80 @@ fun GameScreen(modifier: Modifier = Modifier) {
         isTrucoEnabled = false
     }
 
-    Column(modifier = modifier) {
-        Text("Pontuação - US: $usScore | THEM: $themScore", style = MaterialTheme.typography.bodyLarge)
+    val pointButtonnModifier = Modifier
+        .width(110.dp)
+        .height(80.dp)
 
-        Spacer(modifier = Modifier.height((16.dp)))
+    val centerButtonModifier = Modifier
+        .width(220.dp)
+        .height(70.dp)
 
-        Spacer(modifier = Modifier.height((16.dp)))
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .padding(top = 24.dp, start = 16.dp, end = 16.dp)
+    ) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Nós", style = MaterialTheme.typography.bodyLarge, fontSize = 40.sp)
+                Text("${usScore}", style = MaterialTheme.typography.bodyMedium, fontSize = 70.sp)
+                Button(
+                    onClick = addPointTeamUs,
+                    enabled = !isGameFinished,
+                    modifier = pointButtonnModifier,
+                    contentPadding = PaddingValues(0.dp)
+                )  {
+                    Text("+${roundValue.points}", fontSize = 34.sp)
+                }
+            }
 
-        Button(onClick = addPointTeamUs, enabled = !isGameFinished) {
-            Text("+${roundValue.points}")
+            Spacer(modifier = Modifier.width((16.dp)))
+
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Eles", style = MaterialTheme.typography.bodyLarge, fontSize = 40.sp)
+                Text("${themScore}", style = MaterialTheme.typography.bodyMedium, fontSize = 70.sp)
+                Button(
+                    onClick = addPointTeamThem,
+                    enabled = !isGameFinished,
+                    modifier = pointButtonnModifier,
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text("+${roundValue.points}", fontSize = 34.sp)
+                }
+            }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = addPointTeamThem, enabled = !isGameFinished) {
-            Text("+${roundValue.points}")
-        }
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text("Valendo: ${roundValue.points}", fontSize = 26.sp)
+            Button(
+                onClick = callTruco,
+                enabled = !isGameFinished && isTrucoEnabled,
+                modifier = centerButtonModifier
+            ) {
+                Text("Truco", fontSize = 22.sp)
+            }
 
-        Text("Valendo: ${roundValue.points}")
-        Button(onClick = callTruco, enabled = (!isGameFinished && isTrucoEnabled )) {
-            Text("Truco")
-        }
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = reset) {
-            Text("Resetar")
+            Button(
+                onClick = reset,
+                modifier = centerButtonModifier
+            ) {
+                Text("Resetar", fontSize = 22.sp)
+            }
         }
     }
 
